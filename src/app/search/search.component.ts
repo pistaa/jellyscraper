@@ -10,15 +10,19 @@ export class SearchComponent {
   searchCriteria = '';
   settingsVisible = false;
 
-  settingAll = new SearchSetting('all', 'All', true);
-  settingMovies = new SearchSetting('movie', 'Movies', false);
-  settingTv = new SearchSetting('tv', 'Tv series', false);
-  setting?: SearchSetting;
   settings: SearchSetting[] = [
-    this.settingAll,
-    this.settingMovies,
-    this.settingTv,
+    new SearchSetting('all', 'All', true),
+    new SearchSetting('movie', 'Movies', false),
+    new SearchSetting('tv', 'Tv series', false),
   ];
+
+  get currentSetting(): SearchSetting | undefined {
+    return this.settings.find((item) => item.checked);
+  }
+
+  set currentSetting(value: SearchSetting | undefined) {
+    this.settings.every((item) => (item.checked = item.id == value?.id));
+  }
 
   search() {
     alert('search pressed');
