@@ -9,16 +9,29 @@
         (keyup.enter)="search()"
       />
       <button
-        mat-mini-fab
+        matRipple
+        type="reset"
+        title="Clear search criteria"
         *ngIf="searchCriteria"
         (click)="searchCriteria = ''; searchInput.focus()"
       >
         <mat-icon>clear</mat-icon>
       </button>
-      <button matRipple #searchBtn (click)="search()">
+      <button
+        matRipple
+        type="submit"
+        title="Search"
+        #searchBtn
+        (click)="search()"
+      >
         <mat-icon>search</mat-icon>
       </button>
-      <button matRipple (click)="settingsVisible = !settingsVisible">
+      <button
+        matRipple
+        type="button"
+        [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings'"
+        (click)="settingsVisible = !settingsVisible"
+      >
         <mat-icon>settings</mat-icon>
       </button>
     </div>
