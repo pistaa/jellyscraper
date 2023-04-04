@@ -23,17 +23,21 @@
       </button>
     </div>
     <div id="search-settings-container" *ngIf="settingsVisible">
-      <span *ngFor="let item of settings">
+      <mat-radio-group name="search-setting" [(ngModel)]="currentSetting">
         <mat-radio-button
+          *ngFor="let item of settings"
           [id]="item.id"
-          [checked]="item.checked"
           [title]="item.label"
-          name="search-setting"
-          (click)="currentSetting = item"
+          [value]="item"
         >
           {{ item.label }}
         </mat-radio-button>
-      </span>
+      </mat-radio-group>
     </div>
   </div>
+</div>
+<div id="search-results">
+  <span *ngFor="let item of searchResults">
+    Item id: {{ item.id }}, Item type: {{ item.media_type }}<br />
+  </span>
 </div>

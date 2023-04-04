@@ -1,4 +1,11 @@
 import { Component } from '@angular/core';
+import {
+  SearchMovieRequest,
+  SearchMultiRequest,
+  SearchTvRequest,
+} from 'moviedb-promise';
+import { MovieDbService } from '../service/moviedb.service';
+import { SearchResults } from './search-result';
 import { SearchSetting } from './search-setting';
 
 @Component({
@@ -16,15 +23,43 @@ export class SearchComponent {
     new SearchSetting('tv', 'Tv series', false),
   ];
 
-  get currentSetting(): SearchSetting | undefined {
-    return this.settings.find((item) => item.checked);
-  }
+  searchResults: SearchResults = [];
+  currentSetting: SearchSetting = this.settings[0];
 
-  set currentSetting(value: SearchSetting | undefined) {
-    this.settings.every((item) => (item.checked = item.id == value?.id));
-  }
+  constructor(private movieDb: MovieDbService) {}
 
   search() {
-    alert('search pressed');
+    switch (this.currentSetting?.id) {
+      case 'all':
+        this.movieDb
+          .searchMulti(<SearchMultiRequest>{
+            query: this.searchCriteria,
+            language: 'hu-HU',
+          })
+          .then((value) => this.processSearchResults(value.results));
+        break;
+      case 'movie':
+        this.movieDb
+          .searchMovie(<SearchMovieRequest>{
+            query: this.searchCriteria,
+            language: 'hu-HU',
+          })
+          .then((value) => this.processSearchResults(value.results));
+        break;
+      case 'tv':
+        this.movieDb
+          .searchTv(<SearchTvRequest>{
+            query: this.searchCriteria,
+            language: 'hu-HU',
+          })
+          .then((value) => this.processSearchResults(value.results));
+        break;
+      default:
+        break;
+    }
+  }
+
+  private processSearchResults(results: SearchResults) {
+    this.searchResults = results ?? [];
   }
 }
