@@ -50,7 +50,8 @@
   </div>
 </div>
 <div id="search-results">
-  <span *ngFor="let item of searchResults">
-    Item id: {{ item.id }}, Item type: {{ item.media_type }}<br />
-  </span>
+  <app-media-card
+    *ngFor="let item of searchResults"
+    [media]="item"
+  ></app-media-card>
 </div>

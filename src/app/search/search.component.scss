@@ -80,3 +80,17 @@
     }
   }
 }
+
+#search-results {
+  margin: 7px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+  gap: 10px;
+  flex: 1;
+}
+
+@media screen and (max-width: 800px) {
+  #search-results {
+    grid-template-columns: 1fr;
+  }
+}

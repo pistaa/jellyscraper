@@ -1,0 +1,82 @@
+$image-width: 120px;
+$image-height: 180px;
+$padding: 20px;
+
+.card {
+  background-color: rgb(245, 240, 240);
+  background-size: cover;
+  border: 0;
+  border-radius: 24px;
+  padding: $padding;
+  display: grid;
+  grid-template-columns: auto 1fr;
+  grid-template-rows: auto 1fr auto;
+  grid-template-areas: "poster header" "poster description" "poster actions";
+  gap: calc($padding * 0.75);
+  min-height: $image-height;
+  max-height: $image-height;
+
+  .poster {
+    grid-area: poster;
+    min-width: $image-width;
+    min-height: $image-height;
+    max-width: $image-width;
+    max-height: $image-height;
+    border-radius: 12px;
+  }
+
+  .header {
+    grid-area: header;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    gap: 7px;
+
+    .mat-icon {
+      width: 26px;
+    }
+
+    h1 {
+      margin: 0;
+      font-size: 22px;
+      overflow: hidden;
+      text-overflow: ellipsis;
+      white-space: nowrap;
+      flex: 1;
+      width: 0;
+    }
+  }
+
+  .description {
+    grid-area: description;
+    overflow: hidden;
+    white-space: pre-line;
+    text-overflow: ellipsis;
+    text-align: justify;
+    display: -webkit-box;
+    -webkit-line-clamp: 5;
+    -webkit-box-orient: vertical;
+  }
+
+  .actions {
+    grid-area: actions;
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+
+    span {
+      flex: 1;
+    }
+  }
+}
+
+@media screen and (max-width: 800px) {
+  .card {
+    grid-template-areas: "header header" "poster description" "poster actions";
+    max-height: unset;
+
+    .description {
+      -webkit-line-clamp: 6;
+    }
+  }
+}
