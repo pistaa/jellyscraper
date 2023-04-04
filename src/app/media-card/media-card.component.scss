@@ -12,7 +12,7 @@ $padding: 20px;
   grid-template-columns: auto 1fr;
   grid-template-rows: auto 1fr auto;
   grid-template-areas: "poster header" "poster description" "poster actions";
-  gap: calc($padding * 0.75);
+  gap: calc($padding * 0.5);
   min-height: $image-height;
   max-height: $image-height;
 
@@ -76,7 +76,7 @@ $padding: 20px;
     max-height: unset;
 
     .description {
-      -webkit-line-clamp: 6;
+      -webkit-line-clamp: 7;
     }
   }
 }
