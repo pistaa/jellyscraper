@@ -1,6 +1,7 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input } from '@angular/core';
 import { MovieResult, PersonResult, TvResult } from 'moviedb-promise';
+import { MovieDbService } from '../service/moviedb.service';
 
 @Component({
   selector: 'app-media-card',
@@ -43,9 +44,11 @@ export class MediaCardComponent {
     folderName: string;
   };
 
+  fetching = false;
+
   copyIcon = 'content_copy';
 
-  constructor(private clipboard: Clipboard) {}
+  constructor(private clipboard: Clipboard, private movieDb: MovieDbService) {}
 
   private fetchMovie(value: MovieResult) {
     this.data = {
@@ -95,6 +98,17 @@ export class MediaCardComponent {
       infoUrl: value.id ? 'https://www.themoviedb.org/person/' + value.id : '',
       folderName: '',
     };
+    this.fetching = true;
+    if (value.id) {
+      this.movieDb
+        .personInfo(value.id)
+        .then((result) => {
+          if (result && this.data) {
+            this.data.description = result.biography ?? '';
+          }
+        })
+        .finally(() => (this.fetching = false));
+    }
   }
 
   private fetchTv(value: TvResult) {

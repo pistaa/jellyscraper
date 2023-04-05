@@ -20,7 +20,10 @@
     <mat-icon>{{ data?.icon }}</mat-icon>
     <h1>{{ data?.title + (data?.year ? " (" + data?.year + ")" : "") }}</h1>
   </div>
-  <span class="description">{{ data?.description }}</span>
+  <div class="description">
+    <span *ngIf="data?.description">{{ data?.description }}</span>
+    <mat-spinner *ngIf="fetching"></mat-spinner>
+  </div>
   <div class="actions">
     <span></span>
     <button
