@@ -21,6 +21,7 @@ export class SearchComponent {
     new SearchSetting('all', 'All', true),
     new SearchSetting('movie', 'Movies', false),
     new SearchSetting('tv', 'Tv series', false),
+    new SearchSetting('person', 'Persons', false),
   ];
 
   searchResults: SearchResults = [];
@@ -44,7 +45,14 @@ export class SearchComponent {
             query: this.searchCriteria,
             language: 'hu-HU',
           })
-          .then((value) => this.processSearchResults(value.results));
+          .then((value) =>
+            this.processSearchResults(
+              value.results?.map((item) => {
+                item.media_type = 'movie';
+                return item;
+              })
+            )
+          );
         break;
       case 'tv':
         this.movieDb
@@ -52,7 +60,29 @@ export class SearchComponent {
             query: this.searchCriteria,
             language: 'hu-HU',
           })
-          .then((value) => this.processSearchResults(value.results));
+          .then((value) =>
+            this.processSearchResults(
+              value.results?.map((item) => {
+                item.media_type = 'tv';
+                return item;
+              })
+            )
+          );
+        break;
+      case 'person':
+        this.movieDb
+          .searchPerson(<SearchMultiRequest>{
+            query: this.searchCriteria,
+            language: 'hu-HU',
+          })
+          .then((value) =>
+            this.processSearchResults(
+              value.results?.map((item) => {
+                item.media_type = 'person';
+                return item;
+              })
+            )
+          );
         break;
       default:
         break;
