@@ -1,6 +1,11 @@
 import { Clipboard } from '@angular/cdk/clipboard';
 import { Component, Input } from '@angular/core';
-import { MovieResult, PersonResult, TvResult } from 'moviedb-promise';
+import {
+  IdAppendToResponseRequest,
+  MovieResult,
+  PersonResult,
+  TvResult,
+} from 'moviedb-promise';
 import { MovieDbService } from '../service/moviedb.service';
 
 @Component({
@@ -101,7 +106,10 @@ export class MediaCardComponent {
     this.fetching = true;
     if (value.id) {
       this.movieDb
-        .personInfo(value.id)
+        .personInfo(<IdAppendToResponseRequest>{
+          id: value.id,
+          language: 'hu-HU',
+        })
         .then((result) => {
           if (result && this.data) {
             this.data.description = result.biography ?? '';
