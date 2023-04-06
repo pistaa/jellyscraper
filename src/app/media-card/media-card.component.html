@@ -22,7 +22,12 @@
   </div>
   <div class="description">
     <span *ngIf="data?.description">{{ data?.description }}</span>
-    <mat-spinner *ngIf="fetching"></mat-spinner>
+    <ngx-skeleton-loader
+      *ngIf="fetching"
+      class="skeleton"
+      count="3"
+      appearance="line"
+    ></ngx-skeleton-loader>
   </div>
   <div class="actions">
     <span></span>
