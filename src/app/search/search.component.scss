@@ -1,6 +1,7 @@
 :host {
   display: flex;
   flex-direction: column;
+  gap: 15px;
 }
 
 #top-bar {
@@ -86,6 +87,13 @@
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 10px;
+}
+
+#search-indicator {
+  flex: 1;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 @media screen and (max-width: 800px) {

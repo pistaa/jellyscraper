@@ -55,3 +55,6 @@
     [media]="item"
   ></app-media-card>
 </div>
+<div *ngIf="searchInProgress" id="search-indicator">
+  <mat-spinner></mat-spinner>
+</div>
