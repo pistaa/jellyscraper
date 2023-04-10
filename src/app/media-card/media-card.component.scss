@@ -15,6 +15,7 @@ $padding: 20px;
   gap: calc($padding * 0.5);
   min-height: $image-height;
   max-height: $image-height;
+  transition: transform ease 0.2s, box-shadow ease 0.2s;
 
   .poster {
     grid-area: poster;
@@ -78,6 +79,13 @@ $padding: 20px;
       flex: 1;
     }
   }
+}
+
+.card:hover {
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.2);
+  transform: scale(1.02);
 }
 
 @media screen and (max-width: 800px) {
