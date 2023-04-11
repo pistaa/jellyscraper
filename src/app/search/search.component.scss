@@ -16,6 +16,56 @@
   z-index: 10;
 }
 
+#trending-results {
+  display: block;
+  position: absolute;
+  top: 55px;
+  width: inherit;
+  background-color: #e5eff1;
+  border-radius: 12px;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 15px;
+    cursor: pointer;
+    align-items: center;
+    gap: 7px;
+
+    :nth-child(1) {
+      color: rgba(0, 0, 0, 0.75);
+    }
+
+    :nth-child(2) {
+      flex: 1;
+    }
+
+    :nth-child(3) {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  div:hover {
+    background-color: #d8e1e4;
+  }
+
+  .focused-trending-item:first-child,
+  :first-child:hover {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  .focused-trending-item:last-child,
+  :last-child:hover {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  .focused-trending-item {
+    background-color: #cbd3d7 !important;
+  }
+}
+
 .top-bar-shadow {
   border-bottom: #f0f0f0 1px solid;
   box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);

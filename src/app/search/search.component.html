@@ -6,7 +6,10 @@
         placeholder="Search"
         #searchInput
         [(ngModel)]="searchCriteria"
-        (keyup.enter)="search()"
+        (keyup)="trending()"
+        (keyup.arrowup)="prevTrending()"
+        (keyup.arrowdown)="nextTrending()"
+        (keyup.enter)="onSearch()"
       />
       <button
         matRipple
@@ -30,7 +33,7 @@
         matRipple
         type="button"
         [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings'"
-        (click)="settingsVisible = !settingsVisible"
+        (click)="settingsVisible = !settingsVisible; trendingResults = []"
       >
         <mat-icon>settings</mat-icon>
       </button>
@@ -46,6 +49,22 @@
           {{ item.label }}
         </mat-radio-button>
       </mat-radio-group>
+    </div>
+    <div
+      *ngIf="trendingResults && trendingResults.length > 0"
+      id="trending-results"
+    >
+      <div
+        *ngFor="let item of trendingResults"
+        (click)="searchByTrendingResult(item)"
+        [ngClass]="{ 'focused-trending-item': item == focusedTrendingItem }"
+      >
+        <mat-icon *ngIf="item.media_type == 'movie'">movie</mat-icon>
+        <mat-icon *ngIf="item.media_type == 'tv'">tv</mat-icon>
+        <mat-icon *ngIf="item.media_type == 'person'">person</mat-icon>
+        <span>{{ getTitle(item) }}</span>
+        <span>{{ getYear(item) }}</span>
+      </div>
     </div>
   </div>
 </div>

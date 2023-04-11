@@ -9,7 +9,7 @@ import {
   TvResultsResponse,
 } from 'moviedb-promise';
 import { MovieDbService } from '../service/moviedb.service';
-import { SearchResults } from './search-result';
+import { SearchResult, SearchResults } from './search-result';
 import { SearchSetting } from './search-setting';
 
 @Component({
@@ -29,6 +29,9 @@ export class SearchComponent {
   ];
 
   searchResults: SearchResults = [];
+  trendingResults: SearchResults = [];
+  focusedTrendingItem?: SearchResult;
+  lastTrendingCriteria = '';
   currentSetting: SearchSetting = this.settings[0];
   searchData: {
     criteria?: string;
@@ -40,6 +43,45 @@ export class SearchComponent {
   topBarShadow = false;
 
   constructor(private movieDb: MovieDbService) {}
+
+  private createSearchPromise(
+    type: 'all' | 'movie' | 'tv' | 'person',
+    criteria: string,
+    language: string,
+    page?: number
+  ): Promise<
+    | SearchMultiResponse
+    | MovieResultsResponse
+    | TvResultsResponse
+    | SearchPersonResponse
+  > {
+    switch (type) {
+      case 'all':
+        return this.movieDb.searchMulti(<SearchMultiRequest>{
+          query: criteria,
+          language: language,
+          page: page,
+        });
+      case 'movie':
+        return this.movieDb.searchMovie(<SearchMovieRequest>{
+          query: criteria,
+          language: language,
+          page: page,
+        });
+      case 'tv':
+        return this.movieDb.searchTv(<SearchTvRequest>{
+          query: criteria,
+          language: language,
+          page: page,
+        });
+      case 'person':
+        return this.movieDb.searchPerson(<SearchMultiRequest>{
+          query: criteria,
+          language: 'hu-HU',
+          page: page,
+        });
+    }
+  }
 
   search(page?: number) {
     if (!page) {
@@ -62,56 +104,48 @@ export class SearchComponent {
     }
     this.searchData.currentPage = (this.searchData.currentPage ?? 0) + 1;
     this.searchInProgress = true;
-    switch (this.searchData.setting.id) {
-      case 'all':
-        this.movieDb
-          .searchMulti(<SearchMultiRequest>{
-            query: this.searchData.criteria,
-            language: 'hu-HU',
-            page: page,
-          })
-          .then((value) => this.processSearchResults(value))
-          .finally(() => (this.searchInProgress = false));
-        break;
-      case 'movie':
-        this.movieDb
-          .searchMovie(<SearchMovieRequest>{
-            query: this.searchData.criteria,
-            language: 'hu-HU',
-            page: page,
-          })
-          .then((value) => this.processSearchResults(value, 'movie'))
-          .finally(() => (this.searchInProgress = false));
-        break;
-      case 'tv':
-        this.movieDb
-          .searchTv(<SearchTvRequest>{
-            query: this.searchData.criteria,
-            language: 'hu-HU',
-            page: page,
-          })
-          .then((value) => this.processSearchResults(value, 'tv'))
-          .finally(() => (this.searchInProgress = false));
-        break;
-      case 'person':
-        this.movieDb
-          .searchPerson(<SearchMultiRequest>{
-            query: this.searchData.criteria,
-            language: 'hu-HU',
-            page: page,
-          })
-          .then((value) => this.processSearchResults(value, 'person'))
-          .finally(() => (this.searchInProgress = false));
-        break;
-      default:
-        break;
-    }
+    this.trendingResults = [];
+    this.createSearchPromise(
+      this.searchData.setting.id,
+      this.searchData.criteria,
+      'hu-HU',
+      page
+    )
+      .then((value) =>
+        this.processSearchResults(
+          value,
+          this.searchData.setting?.id != 'all'
+            ? this.searchData.setting?.id
+            : undefined
+        )
+      )
+      .finally(() => (this.searchInProgress = false));
   }
 
   private searchNextPage() {
     if (this.searchData.currentPage) {
       this.search(this.searchData.currentPage + 1);
     }
+  }
+
+  onSearch() {
+    if (this.focusedTrendingItem) {
+      this.searchCriteria =
+        this.getTitle(this.focusedTrendingItem) ?? this.searchCriteria;
+    }
+    this.search();
+  }
+
+  private fixMediaType(
+    arr: SearchResults,
+    mediaType: 'movie' | 'tv' | 'person'
+  ): SearchResults {
+    return arr
+      ? arr.map((item) => {
+          item.media_type = mediaType;
+          return item;
+        })
+      : [];
   }
 
   private processSearchResults(
@@ -128,18 +162,102 @@ export class SearchComponent {
       return;
     }
     if (mediaType) {
-      resultArr = resultArr
-        ? resultArr.map((item) => {
-            item.media_type = mediaType;
-            return item;
-          })
-        : [];
+      resultArr = this.fixMediaType(resultArr, mediaType);
     }
     if (this.searchResults) {
-      this.searchResults = this.searchResults.concat(resultArr);
+      this.searchResults = this.searchResults.concat(resultArr ?? []);
     } else {
       this.searchResults = resultArr;
     }
+  }
+
+  trending() {
+    if (!this.searchCriteria) {
+      this.trendingResults = [];
+      return;
+    }
+    console.log(this.searchCriteria);
+    if (this.lastTrendingCriteria == this.searchCriteria) {
+      return;
+    }
+    this.lastTrendingCriteria = this.searchCriteria;
+    this.createSearchPromise(
+      this.currentSetting.id,
+      this.searchCriteria,
+      'hu-HU'
+    ).then((value) => {
+      if (this.currentSetting.id != 'all') {
+        value.results = this.fixMediaType(
+          value.results,
+          this.currentSetting.id
+        );
+      }
+      this.trendingResults = value.results?.slice(0, 10);
+    });
+  }
+
+  prevTrending() {
+    if (!this.trendingResults || this.trendingResults.length == 0) {
+      return;
+    }
+    if (!this.focusedTrendingItem) {
+      this.focusedTrendingItem =
+        this.trendingResults[this.trendingResults.length - 1];
+    } else {
+      let index = this.trendingResults.indexOf(this.focusedTrendingItem) - 1;
+      if (index < 0) {
+        this.focusedTrendingItem = undefined;
+      } else {
+        this.focusedTrendingItem = this.trendingResults[index];
+      }
+    }
+  }
+
+  nextTrending() {
+    if (!this.trendingResults || this.trendingResults.length == 0) {
+      return;
+    }
+    if (!this.focusedTrendingItem) {
+      this.focusedTrendingItem = this.trendingResults[0];
+    } else {
+      let index = this.trendingResults.indexOf(this.focusedTrendingItem) + 1;
+      if (index >= this.trendingResults.length) {
+        this.focusedTrendingItem = undefined;
+      } else {
+        this.focusedTrendingItem = this.trendingResults[index];
+      }
+    }
+  }
+
+  getTitle(searchResult: SearchResult): string | undefined {
+    switch (searchResult.media_type) {
+      case 'movie':
+        return searchResult.title;
+      case 'tv':
+        return searchResult.name;
+      case 'person':
+        return searchResult.name;
+    }
+  }
+
+  getYear(searchResult: SearchResult): string | undefined {
+    switch (searchResult.media_type) {
+      case 'movie':
+        return searchResult.release_date?.substring(0, 4);
+      case 'tv':
+        return searchResult.first_air_date?.substring(0, 4);
+      case 'person':
+        return undefined;
+    }
+  }
+
+  searchByTrendingResult(item: SearchResult) {
+    let title = this.getTitle(item);
+    if (!title) {
+      return;
+    }
+    this.searchCriteria = title;
+    this.search();
   }
 
   @HostListener('window:scroll', ['$event'])
