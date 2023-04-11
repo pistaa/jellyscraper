@@ -37,6 +37,7 @@ export class SearchComponent {
     totalPages?: number;
   } = {};
   searchInProgress = false;
+  topBarShadow = false;
 
   constructor(private movieDb: MovieDbService) {}
 
@@ -156,5 +157,6 @@ export class SearchComponent {
     if (!this.searchInProgress && window.scrollY >= limit - pageHeight / 2) {
       this.searchNextPage();
     }
+    this.topBarShadow = window.scrollY > 20;
   }
 }
