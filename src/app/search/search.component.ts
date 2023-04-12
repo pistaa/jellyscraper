@@ -277,4 +277,8 @@ export class SearchComponent {
     }
     this.topBarShadow = window.scrollY > 20;
   }
+
+  isFocused(a: any) {
+    return a == document.activeElement;
+  }
 }

@@ -51,7 +51,9 @@
       </mat-radio-group>
     </div>
     <div
-      *ngIf="trendingResults && trendingResults.length > 0"
+      *ngIf="
+        trendingResults && trendingResults.length > 0 && isFocused(searchInput)
+      "
       id="trending-results"
     >
       <div
