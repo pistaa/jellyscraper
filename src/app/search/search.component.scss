@@ -11,16 +11,17 @@
   justify-content: center;
   transition: box-shadow ease 0.5s;
   background-color: white;
-  position: sticky;
+  position: absolute;
   top: 0px;
   z-index: 10;
 }
 
 #trending-results {
-  display: block;
-  position: absolute;
-  top: 55px;
-  width: inherit;
+  // display: block;
+  // position: absolute;
+  // top: 55px;
+  // width: inherit;
+  margin-top: 4px;
   background-color: #e5eff1;
   border-radius: 12px;
 
@@ -38,6 +39,9 @@
 
     :nth-child(2) {
       flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
     }
 
     :nth-child(3) {
@@ -145,7 +149,7 @@
 }
 
 #search-results {
-  margin: 7px;
+  margin: 60px 7px 7px 7px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 10px;
