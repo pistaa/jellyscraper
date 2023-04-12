@@ -4,6 +4,16 @@
   gap: 15px;
 }
 
+#header {
+  width: 100%;
+  display: flex;
+  flex-direction: column;
+  position: sticky;
+  top: 0px;
+  z-index: 10;
+  align-items: center;
+}
+
 #top-bar {
   width: 100%;
   display: flex;
@@ -11,19 +21,15 @@
   justify-content: center;
   transition: box-shadow ease 0.5s;
   background-color: white;
-  position: absolute;
-  top: 0px;
-  z-index: 10;
 }
 
 #trending-results {
-  // display: block;
-  // position: absolute;
-  // top: 55px;
-  // width: inherit;
-  margin-top: 4px;
   background-color: #e5eff1;
   border-radius: 12px;
+  width: 600px;
+  max-width: 100%;
+  position: absolute;
+  top: 60px;
 
   div {
     display: flex;
@@ -149,7 +155,7 @@
 }
 
 #search-results {
-  margin: 60px 7px 7px 7px;
+  margin: 7px;
   display: grid;
   grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
   gap: 10px;
