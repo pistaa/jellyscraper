@@ -8,6 +8,7 @@ import {
   SearchTvRequest,
   TvResultsResponse,
 } from 'moviedb-promise';
+import { interval, take } from 'rxjs';
 import { MovieDbService } from '../service/moviedb.service';
 import { SearchResult, SearchResults } from './search-result';
 import { SearchSetting } from './search-setting';
@@ -32,6 +33,7 @@ export class SearchComponent {
   trendingResults: SearchResults = [];
   focusedTrendingItem?: SearchResult;
   lastTrendingCriteria = '';
+  trendingVisible = false;
   currentSetting: SearchSetting = this.settings[0];
   searchData: {
     criteria?: string;
@@ -176,7 +178,6 @@ export class SearchComponent {
       this.trendingResults = [];
       return;
     }
-    console.log(this.searchCriteria);
     if (this.lastTrendingCriteria == this.searchCriteria) {
       return;
     }
@@ -185,15 +186,24 @@ export class SearchComponent {
       this.currentSetting.id,
       this.searchCriteria,
       'hu-HU'
-    ).then((value) => {
-      if (this.currentSetting.id != 'all') {
-        value.results = this.fixMediaType(
-          value.results,
-          this.currentSetting.id
-        );
-      }
-      this.trendingResults = value.results?.slice(0, 10);
-    });
+    )
+      .then((value) => {
+        if (this.currentSetting.id != 'all') {
+          value.results = this.fixMediaType(
+            value.results,
+            this.currentSetting.id
+          );
+        }
+        this.trendingResults = value.results?.slice(0, 10);
+        this.trendingVisible = true;
+      })
+      .finally(() => (this.focusedTrendingItem = undefined));
+  }
+
+  trendingResultsDelayedHide() {
+    interval(100)
+      .pipe(take(1))
+      .subscribe(() => (this.trendingVisible = false));
   }
 
   prevTrending() {
