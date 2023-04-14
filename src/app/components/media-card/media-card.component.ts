@@ -6,7 +6,7 @@ import {
   PersonResult,
   TvResult,
 } from 'moviedb-promise';
-import { MovieDbService } from '../service/moviedb.service';
+import { MovieDbService } from '../../services';
 
 @Component({
   selector: 'app-media-card',

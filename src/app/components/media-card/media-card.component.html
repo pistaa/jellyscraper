@@ -5,7 +5,7 @@
         '\')'
       : 'unset'
   }">
-  <img *ngIf="data?.posterUrl" [src]="data?.posterUrl" [alt]="data?.title" [title]="data?.title" loading="lazy"
+  <img *ngIf="data?.posterUrl" [src]="data?.posterUrl" alt="{{ data?.title }}" [title]="data?.title" loading="lazy"
     class="poster" />
   <div class="header">
     <mat-icon>{{ data?.icon }}</mat-icon>

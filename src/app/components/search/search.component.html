@@ -3,8 +3,8 @@
     <div>
       <div id="search-input-container">
         <input type="text" placeholder="Search" #searchInput [(ngModel)]="searchCriteria" (keyup)="trending()"
-          (keyup.arrowup)="prevTrending()" (keyup.arrowdown)="nextTrending()" (keyup.enter)="onSearch()"
-          (blur)="trendingResultsDelayedHide()" />
+          (keyup.arrowup)="prevSuggestion()" (keyup.arrowdown)="nextSuggestion()" (keyup.enter)="onSearch()"
+          (blur)="suggestionsDelayedHide()" />
         <button matRipple type="reset" title="Clear search criteria" *ngIf="searchCriteria"
           (click)="searchCriteria = ''; searchInput.focus()">
           <mat-icon>clear</mat-icon>
@@ -13,7 +13,7 @@
           <mat-icon>search</mat-icon>
         </button>
         <button matRipple type="button" [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings'"
-          (click)="settingsVisible = !settingsVisible; trendingResults = []">
+          (click)="settingsVisible = !settingsVisible; suggestions = []">
           <mat-icon>settings</mat-icon>
         </button>
       </div>
@@ -26,12 +26,12 @@
       </div>
     </div>
   </div>
-  <div *ngIf="trendingResults && trendingResults.length > 0 && trendingVisible" id="trending-results">
-    <div *ngFor="let item of trendingResults" (click)="searchByTrendingResult(item)"
-      [ngClass]="{ 'focused-trending-item': item == focusedTrendingItem }">
-      <mat-icon *ngIf="item.media_type == 'movie'">movie</mat-icon>
-      <mat-icon *ngIf="item.media_type == 'tv'">tv</mat-icon>
-      <mat-icon *ngIf="item.media_type == 'person'">person</mat-icon>
+  <div *ngIf="suggestions && suggestions.length > 0 && suggestionsVisible" id="trending-results">
+    <div *ngFor="let item of suggestions" (click)="searchBySuggestion(item)"
+      [ngClass]="{ 'focused-trending-item': item === focusedSuggestion }">
+      <mat-icon *ngIf="item.media_type === 'movie'">movie</mat-icon>
+      <mat-icon *ngIf="item.media_type === 'tv'">tv</mat-icon>
+      <mat-icon *ngIf="item.media_type === 'person'">person</mat-icon>
       <span>{{ getTitle(item) }}</span>
       <span>{{ getYear(item) }}</span>
     </div>

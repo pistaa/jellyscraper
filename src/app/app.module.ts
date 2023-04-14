@@ -10,8 +10,8 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { MediaCardComponent } from './media-card/media-card.component';
-import { SearchComponent } from './search/search.component';
+import { MediaCardComponent } from './components/media-card/media-card.component';
+import { SearchComponent } from './components/search/search.component';
 
 @NgModule({
   declarations: [AppComponent, SearchComponent, MediaCardComponent],
