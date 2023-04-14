@@ -83,6 +83,8 @@ export class MediaCardComponent {
       .replaceAll('\\', '')
       .replaceAll('/', '')
       .replaceAll(':', '')
+      .replaceAll('?', '')
+      .replaceAll('*', '')
       .trim();
   }
 
@@ -147,6 +149,8 @@ export class MediaCardComponent {
       .replaceAll('\\', '')
       .replaceAll('/', '')
       .replaceAll(':', '')
+      .replaceAll('?', '')
+      .replaceAll('*', '')
       .trim();
   }
 
