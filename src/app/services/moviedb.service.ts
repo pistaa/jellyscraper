@@ -7,6 +7,7 @@ import {
   SearchPersonResponse,
   TvResultsResponse,
 } from 'moviedb-promise';
+import { environment } from 'src/environments/environment';
 import { SearchParam } from '../interfaces';
 import { MediaTypes } from '../types';
 
@@ -15,7 +16,7 @@ import { MediaTypes } from '../types';
 })
 export class MovieDbService extends MovieDb {
   constructor() {
-    super('132ed6cd86538da6c9c9a0ddb3ccbb0b');
+    super(environment.movieDbApiKey);
   }
 
   search(
