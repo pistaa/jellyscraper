@@ -63,7 +63,6 @@ export class SearchComponent {
       .search(<SearchParam>{
         media_type: this.searchData.setting.id,
         query: this.searchData.criteria,
-        language: 'hu-HU',
         page: page,
       })
       .then((value) => this.processSearchResults(value))
@@ -117,7 +116,6 @@ export class SearchComponent {
       .search(<SearchParam>{
         media_type: this.currentSetting.id,
         query: this.searchCriteria,
-        language: 'hu-HU',
       })
       .then((value) => {
         value = this.movieDb.fillMissingMediaTypes(value);

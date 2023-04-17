@@ -1,4 +1,5 @@
 import { Injectable } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import { AxiosRequestConfig } from 'axios';
 import {
   MovieDb,
@@ -15,7 +16,7 @@ import { MediaTypes } from '../types';
   providedIn: 'root',
 })
 export class MovieDbService extends MovieDb {
-  constructor() {
+  constructor(private translate: TranslateService) {
     super(environment.movieDbApiKey);
   }
 
@@ -28,6 +29,7 @@ export class MovieDbService extends MovieDb {
     | TvResultsResponse
     | SearchPersonResponse
   > {
+    params.language = params.language ?? this.translate.currentLang;
     switch (params.media_type) {
       case 'all':
         return this.searchMulti(params, axiosConfig);

@@ -2,17 +2,17 @@
   <div id="top-bar" [ngClass]="{ 'top-bar-shadow': topBarShadow }">
     <div>
       <div id="search-input-container">
-        <input type="text" placeholder="Search" #searchInput [(ngModel)]="searchCriteria" (keyup)="trending()"
-          (keyup.arrowup)="prevSuggestion()" (keyup.arrowdown)="nextSuggestion()" (keyup.enter)="onSearch()"
-          (blur)="suggestionsDelayedHide()" />
-        <button matRipple type="reset" title="Clear search criteria" *ngIf="searchCriteria"
+        <input type="text" placeholder="{{'Search' | translate}}" #searchInput [(ngModel)]="searchCriteria"
+          (keyup)="trending()" (keyup.arrowup)="prevSuggestion()" (keyup.arrowdown)="nextSuggestion()"
+          (keyup.enter)="onSearch()" (blur)="suggestionsDelayedHide()" />
+        <button matRipple type="reset" title="{{'Clear search criteria' | translate}}" *ngIf="searchCriteria"
           (click)="searchCriteria = ''; searchInput.focus()">
           <mat-icon>clear</mat-icon>
         </button>
-        <button matRipple type="submit" title="Search" #searchBtn (click)="search()">
+        <button matRipple type="submit" title="{{'Search' | translate}}" #searchBtn (click)="search()">
           <mat-icon>search</mat-icon>
         </button>
-        <button matRipple type="button" [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings'"
+        <button matRipple type="button" [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings' | translate"
           (click)="settingsVisible = !settingsVisible; suggestions = []">
           <mat-icon>settings</mat-icon>
         </button>
@@ -20,7 +20,7 @@
       <div id="search-settings-container" *ngIf="settingsVisible">
         <mat-radio-group name="search-setting" [(ngModel)]="currentSetting">
           <mat-radio-button *ngFor="let item of settings" [id]="item.id" [title]="item.label" [value]="item">
-            {{ item.label }}
+            {{ item.label | translate }}
           </mat-radio-button>
         </mat-radio-group>
       </div>

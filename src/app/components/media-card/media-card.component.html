@@ -17,13 +17,13 @@
   </div>
   <div class="actions">
     <span></span>
-    <button *ngIf="data?.infoUrl" mat-button type="button" title="Open TMDB page in a seperate tab"
+    <button *ngIf="data?.infoUrl" mat-button type="button" title="{{'Open TMDB page in a seperate tab' | translate}}"
       (click)="openNewTab(data?.infoUrl!)">
-      <mat-icon class="material-icons-outlined">info</mat-icon> Info
+      <mat-icon class="material-icons-outlined">info</mat-icon> {{'Info' | translate}}
     </button>
-    <button *ngIf="data?.folderName" mat-button type="button" title="Copy suggested folder name to clipboard"
-      (click)="copyToClipboard(data?.folderName!)">
-      <mat-icon class="material-icons-outlined">{{ copyIcon }}</mat-icon> Copy
+    <button *ngIf="data?.folderName" mat-button type="button"
+      title="{{'Copy suggested folder name to clipboard' | translate}}" (click)="copyToClipboard(data?.folderName!)">
+      <mat-icon class="material-icons-outlined">{{ copyIcon }}</mat-icon> {{'Copy' | translate}}
     </button>
   </div>
 </div>
