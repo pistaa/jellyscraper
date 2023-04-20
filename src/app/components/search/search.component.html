@@ -19,12 +19,12 @@
           <mat-icon class="material-icons-outlined">
             {{ item.icon }}
           </mat-icon>
-          {{ item.label | translate }}
+          <span>{{ item.label | translate }}</span>
         </span>
         <span class="flex-expand"></span>
         <span class="setting language-button" (click)="changeLanguage()">
           <mat-icon class="material-icons-outlined">language</mat-icon>
-          {{ 'Language' | translate }}
+          <span>{{ 'Language' | translate }}</span>
         </span>
       </div>
     </div>

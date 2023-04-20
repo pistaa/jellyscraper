@@ -169,7 +169,6 @@
 
   .selected-setting,
   .language-button:hover {
-    //border-bottom: 2px solid #2077e4;
     box-shadow: 0px 2px 0px 0px #2077e4;
 
     .mat-icon {
@@ -192,5 +191,9 @@
 @media screen and (max-width: 800px) {
   #search-results {
     grid-template-columns: 1fr;
+  }
+
+  .setting > span {
+    display: none;
   }
 }
