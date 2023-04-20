@@ -1,8 +1,6 @@
 {
   "Search": "Search",
   "Clear search criteria": "Clear search criteria",
-  "Hide search settings": "Hide search settings",
-  "Show search settings": "Show search settings",
   "All": "All",
   "Movies": "Movies",
   "Tv series": "Tv series",
@@ -13,5 +11,6 @@
   "Copy": "Copy",
   "Created and maintained by": "Created and maintained by",
   "Metadata source": "Metadata source",
-  "LinkedIn profile": "LinkedIn profile"
+  "LinkedIn profile": "LinkedIn profile",
+  "Language": "Magyar"
 }

@@ -1,8 +1,6 @@
 {
   "Search": "Keresés",
   "Clear search criteria": "Keresési feltétel törlése",
-  "Hide search settings": "Beállítások elrejtése",
-  "Show search settings": "Beállítások mutatása",
   "All": "Összes",
   "Movies": "Filmek",
   "Tv series": "Sorozatok",
@@ -13,5 +11,6 @@
   "Copy": "Másol",
   "Created and maintained by": "Létrehozta és karbantartja",
   "Metadata source": "Meta adat forrás:",
-  "LinkedIn profile": "LinkedIn profil"
+  "LinkedIn profile": "LinkedIn profil",
+  "Language": "English"
 }

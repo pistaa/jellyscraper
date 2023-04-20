@@ -1,4 +1,5 @@
 import { Component, HostListener, inject } from '@angular/core';
+import { TranslateService } from '@ngx-translate/core';
 import {
   MovieResultsResponse,
   SearchMultiResponse,
@@ -22,7 +23,6 @@ import { SearchResult, SearchResults } from '../../types';
 })
 export class SearchComponent {
   searchCriteria = '';
-  settingsVisible = false;
 
   settings = SearchSettings;
   searchResults: SearchResults = [];
@@ -36,6 +36,7 @@ export class SearchComponent {
   topBarShadow = false;
 
   private movieDb = inject(MovieDbService);
+  private translate = inject(TranslateService);
 
   search(page?: number) {
     if (!page) {
@@ -214,5 +215,11 @@ export class SearchComponent {
 
   isFocused(a: Element) {
     return a == document.activeElement;
+  }
+
+  changeLanguage() {
+    this.translate.use(
+      this.translate.currentLang === 'hu-HU' ? 'en-US' : 'hu-HU'
+    );
   }
 }

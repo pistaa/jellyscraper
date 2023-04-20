@@ -12,17 +12,20 @@
         <button matRipple type="submit" title="{{'Search' | translate}}" #searchBtn (click)="search()">
           <mat-icon>search</mat-icon>
         </button>
-        <button matRipple type="button" [title]="(settingsVisible ? 'Hide' : 'Show') + ' search settings' | translate"
-          (click)="settingsVisible = !settingsVisible; suggestions = []">
-          <mat-icon>settings</mat-icon>
-        </button>
       </div>
-      <div id="search-settings-container" *ngIf="settingsVisible">
-        <mat-radio-group name="search-setting" [(ngModel)]="currentSetting">
-          <mat-radio-button *ngFor="let item of settings" [id]="item.id" [title]="item.label" [value]="item">
-            {{ item.label | translate }}
-          </mat-radio-button>
-        </mat-radio-group>
+      <div class="settings">
+        <span *ngFor="let item of settings" class="setting" [ngClass]="{'selected-setting': item === currentSetting}"
+          (click)="currentSetting = item">
+          <mat-icon class="material-icons-outlined">
+            {{ item.icon }}
+          </mat-icon>
+          {{ item.label | translate }}
+        </span>
+        <span class="flex-expand"></span>
+        <span class="setting language-button" (click)="changeLanguage()">
+          <mat-icon class="material-icons-outlined">language</mat-icon>
+          {{ 'Language' | translate }}
+        </span>
       </div>
     </div>
   </div>

@@ -78,9 +78,9 @@
 
 .top-bar-shadow {
   border-bottom: #f0f0f0 1px solid;
-  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
   -webkit-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
   -moz-box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
+  box-shadow: 0px 0px 10px 0px rgba(0, 0, 0, 0.5);
 }
 
 #top-bar > div {
@@ -129,29 +129,6 @@
   #search-input-container:has(input:focus) {
     outline: 2px solid rgba($color: #000000, $alpha: 0.6);
   }
-
-  #search-settings-container {
-    display: flex;
-    flex-direction: row;
-    gap: 7px;
-    margin-left: 0px;
-    font-size: 16px;
-
-    input,
-    label {
-      font-size: 14px;
-    }
-  }
-
-  #search-settings-container > span {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-
-    label {
-      font-size: 16px;
-    }
-  }
 }
 
 #search-results {
@@ -166,6 +143,50 @@
   display: flex;
   justify-content: center;
   align-items: center;
+}
+
+.settings {
+  margin: 0 14px;
+  display: flex;
+  flex-direction: row;
+  gap: 12px;
+
+  .setting {
+    display: flex;
+    flex-direction: row;
+    gap: 7px;
+    font-size: 16px;
+    cursor: pointer;
+    padding: 8px 2px 6px 2px;
+    transition: box-shadow 0.2s linear;
+
+    .mat-icon {
+      font-size: 18px;
+      width: 18px;
+      height: 18px;
+    }
+  }
+
+  .selected-setting,
+  .language-button:hover {
+    //border-bottom: 2px solid #2077e4;
+    box-shadow: 0px 2px 0px 0px #2077e4;
+
+    .mat-icon {
+      background: linear-gradient(
+        to bottom right,
+        #4588f0,
+        #e73f37,
+        #f9bb2d,
+        #4588f0,
+        #3ea858,
+        #e73f37
+      );
+      -webkit-background-clip: text;
+      background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+  }
 }
 
 @media screen and (max-width: 800px) {
