@@ -8,6 +8,7 @@ import {
   TvResultsResponse,
 } from 'moviedb-promise';
 import { interval, take } from 'rxjs';
+import { LocalStorageService } from 'src/app/services/local-storage.service';
 import {
   SearchData,
   SearchParam,
@@ -40,6 +41,7 @@ export class SearchComponent implements OnInit {
   private router = inject(Router);
   private movieDb = inject(MovieDbService);
   private translate = inject(TranslateService);
+  private localStorage = inject(LocalStorageService);
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe({
@@ -240,8 +242,8 @@ export class SearchComponent implements OnInit {
   }
 
   changeLanguage() {
-    this.translate.use(
-      this.translate.currentLang === 'hu-HU' ? 'en-US' : 'hu-HU'
-    );
+    const language = this.translate.currentLang === 'hu-HU' ? 'en-US' : 'hu-HU';
+    this.translate.use(language);
+    this.localStorage.lastUsedLanguage = language;
   }
 }

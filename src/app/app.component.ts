@@ -1,6 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { environment } from 'src/environments/environment';
+import { LocalStorageService } from './services/local-storage.service';
 
 @Component({
   selector: 'app-root',
@@ -8,8 +8,11 @@ import { environment } from 'src/environments/environment';
   styleUrls: ['./app.component.scss'],
 })
 export class AppComponent {
-  constructor(private translate: TranslateService) {
-    translate.setDefaultLang(environment.defaultLanguage);
-    translate.use(translate.getDefaultLang());
+  private localStorage = inject(LocalStorageService);
+  private translate = inject(TranslateService);
+
+  constructor() {
+    this.translate.setDefaultLang(this.localStorage.lastUsedLanguage);
+    this.translate.use(this.translate.getDefaultLang());
   }
 }
