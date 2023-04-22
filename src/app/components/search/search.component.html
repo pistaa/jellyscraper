@@ -2,19 +2,19 @@
   <div id="top-bar" [ngClass]="{ 'top-bar-shadow': topBarShadow }">
     <div>
       <div id="search-input-container">
-        <input type="text" placeholder="{{'Search' | translate}}" #searchInput [(ngModel)]="searchCriteria"
+        <input type="text" placeholder="{{ 'Search' | translate }}" #searchInput [(ngModel)]="searchCriteria"
           (keyup)="trending()" (keyup.arrowup)="prevSuggestion()" (keyup.arrowdown)="nextSuggestion()"
           (keyup.enter)="onSearch()" (blur)="suggestionsDelayedHide()" />
-        <button matRipple type="reset" title="{{'Clear search criteria' | translate}}" *ngIf="searchCriteria"
+        <button matRipple type="reset" title="{{ 'Clear search criteria' | translate }}" *ngIf="searchCriteria"
           (click)="searchCriteria = ''; searchInput.focus()">
           <mat-icon>clear</mat-icon>
         </button>
-        <button matRipple type="submit" title="{{'Search' | translate}}" #searchBtn (click)="search()">
+        <button matRipple type="submit" title="{{ 'Search' | translate }}" #searchBtn (click)="search()">
           <mat-icon>search</mat-icon>
         </button>
       </div>
       <div class="settings">
-        <span *ngFor="let item of settings" class="setting" [ngClass]="{'selected-setting': item === currentSetting}"
+        <span *ngFor="let item of settings" class="setting" [ngClass]="{ 'selected-setting': item === currentSetting }"
           (click)="currentSetting = item">
           <mat-icon class="material-icons-outlined">
             {{ item.icon }}
@@ -40,9 +40,7 @@
     </div>
   </div>
 </div>
-<div id="search-results">
-  <app-media-card *ngFor="let item of searchResults" [media]="item"></app-media-card>
-</div>
+<app-media-card-list [mediaList]="searchResults"></app-media-card-list>
 <div *ngIf="searchInProgress" id="search-indicator">
   <mat-spinner></mat-spinner>
 </div>

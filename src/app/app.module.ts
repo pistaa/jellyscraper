@@ -13,6 +13,7 @@ import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
+import { MediaCardListComponent } from './components/media-card-list/media-card-list.component';
 import { MediaCardComponent } from './components/media-card/media-card.component';
 import { SearchComponent } from './components/search/search.component';
 
@@ -21,7 +22,12 @@ export function HttpLoaderFactory(http: HttpClient) {
 }
 
 @NgModule({
-  declarations: [AppComponent, SearchComponent, MediaCardComponent],
+  declarations: [
+    AppComponent,
+    SearchComponent,
+    MediaCardComponent,
+    MediaCardListComponent,
+  ],
   imports: [
     BrowserModule,
     AppRoutingModule,
