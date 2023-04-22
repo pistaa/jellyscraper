@@ -60,6 +60,7 @@ export class SearchComponent {
     this.searchData.currentPage = (this.searchData.currentPage ?? 0) + 1;
     this.searchInProgress = true;
     this.suggestions = [];
+    this.suggestionsVisible = false;
     this.movieDb
       .search(<SearchParam>{
         media_type: this.searchData.setting.id,
@@ -105,6 +106,7 @@ export class SearchComponent {
   }
 
   trending() {
+    this.suggestionsVisible = true;
     if (!this.searchCriteria) {
       this.suggestions = [];
       return;
@@ -121,7 +123,6 @@ export class SearchComponent {
       .then((value) => {
         value = this.movieDb.fillMissingMediaTypes(value);
         this.suggestions = value.results?.slice(0, 10);
-        this.suggestionsVisible = true;
       })
       .finally(() => (this.focusedSuggestion = undefined));
   }
