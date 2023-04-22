@@ -1,4 +1,5 @@
-import { Component, HostListener, inject } from '@angular/core';
+import { Component, HostListener, inject, OnInit } from '@angular/core';
+import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
   MovieResultsResponse,
@@ -21,7 +22,7 @@ import { SearchResult, SearchResults } from '../../types';
   templateUrl: './search.component.html',
   styleUrls: ['./search.component.scss'],
 })
-export class SearchComponent {
+export class SearchComponent implements OnInit {
   searchCriteria = '';
 
   settings = SearchSettings;
@@ -35,8 +36,28 @@ export class SearchComponent {
   searchInProgress = false;
   topBarShadow = false;
 
+  private activatedRoute = inject(ActivatedRoute);
+  private router = inject(Router);
   private movieDb = inject(MovieDbService);
   private translate = inject(TranslateService);
+
+  ngOnInit(): void {
+    this.activatedRoute.params.subscribe({
+      next: (params: Params) => {
+        const settingId = params['type'];
+        const criteria = params['criteria'];
+        if (settingId) {
+          this.currentSetting =
+            this.settings.find((item) => item.id === settingId) ??
+            this.currentSetting;
+        }
+        this.searchCriteria = criteria ?? this.searchCriteria;
+        if (this.searchCriteria) {
+          this.search();
+        }
+      },
+    });
+  }
 
   search(page?: number) {
     if (!page) {
@@ -82,7 +103,7 @@ export class SearchComponent {
       this.searchCriteria =
         this.getTitle(this.focusedSuggestion) ?? this.searchCriteria;
     }
-    this.search();
+    this.router.navigate(['/' + this.currentSetting.id, this.searchCriteria]);
   }
 
   private processSearchResults(

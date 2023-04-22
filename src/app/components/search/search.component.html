@@ -15,7 +15,7 @@
       </div>
       <div class="settings">
         <span *ngFor="let item of settings" class="setting" [ngClass]="{ 'selected-setting': item === currentSetting }"
-          (click)="currentSetting = item">
+          [routerLink]="['/' + item.id, searchCriteria]">
           <mat-icon class="material-icons-outlined">
             {{ item.icon }}
           </mat-icon>

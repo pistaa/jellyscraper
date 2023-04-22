@@ -5,6 +5,10 @@
   gap: 15px;
 }
 
+.router-outlet {
+  display: none;
+}
+
 #content {
   flex: 1;
 }

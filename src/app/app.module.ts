@@ -8,6 +8,7 @@ import { MatProgressSpinnerModule } from '@angular/material/progress-spinner';
 import { MatRadioModule } from '@angular/material/radio';
 import { BrowserModule } from '@angular/platform-browser';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
+import { RouterModule, Routes } from '@angular/router';
 import { TranslateLoader, TranslateModule } from '@ngx-translate/core';
 import { TranslateHttpLoader } from '@ngx-translate/http-loader';
 import { NgxSkeletonLoaderModule } from 'ngx-skeleton-loader';
@@ -20,6 +21,12 @@ import { SearchComponent } from './components/search/search.component';
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
 }
+
+const appRoutes: Routes = [
+  { path: '', component: SearchComponent },
+  { path: ':type', component: SearchComponent },
+  { path: ':type/:criteria', component: SearchComponent },
+];
 
 @NgModule({
   declarations: [
@@ -51,6 +58,7 @@ export function HttpLoaderFactory(http: HttpClient) {
         deps: [HttpClient],
       },
     }),
+    RouterModule.forRoot(appRoutes),
   ],
   providers: [],
   bootstrap: [AppComponent],
