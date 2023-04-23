@@ -183,10 +183,6 @@
 }
 
 @media screen and (max-width: 800px) {
-  #search-results {
-    grid-template-columns: 1fr;
-  }
-
   .setting > span {
     display: none;
   }
