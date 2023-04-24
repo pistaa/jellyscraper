@@ -18,7 +18,7 @@ export class SuggestionListComponent {
 
   @Output() selectSuggestion = new EventEmitter<string>();
 
-  @Input() mediaTypeId: 'all' | 'movie' | 'tv' | 'person' = 'all';
+  @Input() mediaType: 'multi' | 'movie' | 'tv' | 'person' = 'multi';
 
   @Input() set criteria(value: string | undefined) {
     if (!value) {
@@ -31,15 +31,11 @@ export class SuggestionListComponent {
     this.lastUsedCriteria = value;
     this.movieDb
       .search(<SearchParam>{
-        media_type: this.mediaTypeId,
+        media_type: this.mediaType,
         query: value,
       })
       .then(
-        (response) =>
-          (this.suggestions =
-            this.movieDb
-              .fillMissingMediaTypes(response)
-              .results?.splice(0, 10) ?? [])
+        (response) => (this.suggestions = response.results?.splice(0, 10) ?? [])
       )
       .finally(() => (this.focusedSuggestion = undefined));
   }

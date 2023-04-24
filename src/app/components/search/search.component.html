@@ -47,7 +47,7 @@
     </span>
   </div>
   <app-suggestion-list #suggestionList [hidden]="suggestionsHidden"
-    (selectSuggestion)="searchCriteria = $event; onSearch()">
+    (selectSuggestion)="searchCriteria = $event; onSearch()" [mediaType]="currentSetting.id">
   </app-suggestion-list>
 </header>
 <app-media-card-list [mediaList]="searchResults"></app-media-card-list>

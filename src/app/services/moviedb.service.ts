@@ -1,79 +1,78 @@
-import { Injectable } from '@angular/core';
+import { HttpClient } from '@angular/common/http';
+import { Injectable, inject } from '@angular/core';
 import { TranslateService } from '@ngx-translate/core';
-import { AxiosRequestConfig } from 'axios';
+import { firstValueFrom, map } from 'rxjs';
+import { environment } from 'src/environments/environment';
+import { SearchParam } from '../interfaces';
 import {
-  MovieDb,
   MovieResultsResponse,
+  Person,
   SearchMultiResponse,
   SearchPersonResponse,
   TvResultsResponse,
-} from 'moviedb-promise';
-import { environment } from 'src/environments/environment';
-import { SearchParam } from '../interfaces';
-import { MediaTypes } from '../types';
+} from '../models';
 
 @Injectable({
   providedIn: 'root',
 })
-export class MovieDbService extends MovieDb {
-  constructor(private translate: TranslateService) {
-    super(environment.movieDbApiKey);
+export class MovieDbService {
+  private readonly basePath = 'https://api.themoviedb.org/3/';
+  private readonly searchPath = this.basePath + 'search/';
+  private readonly personPath = this.basePath + 'person/';
+  private http = inject(HttpClient);
+  private translate = inject(TranslateService);
+
+  async search(params: SearchParam) {
+    let url =
+      this.searchPath +
+      params.media_type +
+      '?api_key=' +
+      environment.movieDbApiKey +
+      '&language=' +
+      this.translate.currentLang;
+    if (params.page) {
+      url += '&page=' + params.page;
+    }
+    if (params.query) {
+      url += '&query=' + params.query;
+    }
+    if (params.id) {
+      url += '&id=' + params.id;
+    }
+    return await firstValueFrom(
+      this.http
+        .get<
+          | SearchMultiResponse
+          | MovieResultsResponse
+          | TvResultsResponse
+          | SearchPersonResponse
+        >(url, undefined)
+        .pipe(
+          map((value) => {
+            value.results?.forEach(
+              (item) =>
+                (item.media_type =
+                  params.media_type != 'multi'
+                    ? params.media_type
+                    : item.media_type)
+            );
+            return value;
+          })
+        )
+    );
   }
 
-  search(
-    params: SearchParam,
-    axiosConfig?: AxiosRequestConfig
-  ): Promise<
-    | SearchMultiResponse
-    | MovieResultsResponse
-    | TvResultsResponse
-    | SearchPersonResponse
-  > {
-    params.language = params.language ?? this.translate.currentLang;
-    switch (params.media_type) {
-      case 'all':
-        return this.searchMulti(params, axiosConfig);
-      case 'movie':
-        return this.searchMovie(params, axiosConfig);
-      case 'tv':
-        return this.searchTv(params, axiosConfig);
-      case 'person':
-        return this.searchPerson(params, axiosConfig);
-    }
-  }
-
-  fillMissingMediaTypes(
-    response:
-      | SearchMultiResponse
-      | MovieResultsResponse
-      | TvResultsResponse
-      | SearchPersonResponse
-  ):
-    | SearchMultiResponse
-    | MovieResultsResponse
-    | TvResultsResponse
-    | SearchPersonResponse {
-    if (
-      response.results &&
-      response.results.length > 0 &&
-      !response.results[0].media_type
-    ) {
-      let mediaType: MediaTypes | undefined;
-      if (response.results[0]['title']) {
-        mediaType = 'movie';
-      } else if (response.results[0]['profile_path']) {
-        mediaType = 'person';
-      } else if (response.results[0]['name']) {
-        mediaType = 'tv';
-      }
-      if (mediaType) {
-        response.results.forEach(
-          (value) =>
-            (value.media_type =
-              mediaType && mediaType != 'all' ? mediaType : value.media_type)
-        );
-      }
-    }
-    return response;
+  async personInfo(id: number) {
+    return await firstValueFrom(
+      this.http.get<Person>(
+        this.personPath +
+          id +
+          '?api_key=' +
+          environment.movieDbApiKey +
+          '&language=' +
+          this.translate.currentLang,
+        undefined
+      )
+    );
   }
 }

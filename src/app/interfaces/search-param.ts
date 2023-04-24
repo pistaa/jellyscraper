@@ -1,5 +1,6 @@
-import { SearchRequest } from 'moviedb-promise';
-
-export interface SearchParam extends SearchRequest {
-  media_type: 'all' | 'movie' | 'tv' | 'person';
+export interface SearchParam {
+  media_type: 'multi' | 'movie' | 'tv' | 'person';
+  query: string;
+  page?: number;
+  id?: string | number;
 }

@@ -7,13 +7,13 @@ import {
 } from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
+import { interval, take } from 'rxjs';
 import {
   MovieResultsResponse,
   SearchMultiResponse,
   SearchPersonResponse,
   TvResultsResponse,
-} from 'moviedb-promise';
-import { interval, take } from 'rxjs';
+} from 'src/app/models';
 import { MediaTitlePipe } from 'src/app/pipes/media-title.pipe';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import {
@@ -122,15 +122,13 @@ export class SearchComponent implements OnInit {
       | SearchPersonResponse
   ) {
     this.searchData.totalPages = response.total_pages;
-    const resultArr: SearchResults =
-      this.movieDb.fillMissingMediaTypes(response).results;
-    if (!resultArr) {
+    if (!response.results) {
       return;
     }
     if (this.searchResults) {
-      this.searchResults = this.searchResults.concat(resultArr ?? []);
+      this.searchResults = this.searchResults.concat(response.results ?? []);
     } else {
-      this.searchResults = resultArr;
+      this.searchResults = response.results;
     }
   }
 
