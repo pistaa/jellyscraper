@@ -21,7 +21,6 @@ export class SuggestionListComponent {
   @Input() mediaTypeId: 'all' | 'movie' | 'tv' | 'person' = 'all';
 
   @Input() set criteria(value: string | undefined) {
-    console.log(value);
     if (!value) {
       this.suggestions = [];
       return;
