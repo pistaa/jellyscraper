@@ -1,4 +1,10 @@
-import { Component, HostListener, inject, OnInit } from '@angular/core';
+import {
+  Component,
+  HostListener,
+  inject,
+  OnInit,
+  ViewChild,
+} from '@angular/core';
 import { ActivatedRoute, Params, Router } from '@angular/router';
 import { TranslateService } from '@ngx-translate/core';
 import {
@@ -8,6 +14,7 @@ import {
   TvResultsResponse,
 } from 'moviedb-promise';
 import { interval, take } from 'rxjs';
+import { MediaTitlePipe } from 'src/app/pipes/media-title.pipe';
 import { LocalStorageService } from 'src/app/services/local-storage.service';
 import {
   SearchData,
@@ -16,7 +23,8 @@ import {
   SearchSettings,
 } from '../../interfaces';
 import { MovieDbService } from '../../services';
-import { SearchResult, SearchResults } from '../../types';
+import { SearchResults } from '../../types';
+import { SuggestionListComponent } from '../suggestion-list/suggestion-list.component';
 
 @Component({
   selector: 'app-search',
@@ -24,24 +32,22 @@ import { SearchResult, SearchResults } from '../../types';
   styleUrls: ['./search.component.scss'],
 })
 export class SearchComponent implements OnInit {
-  searchCriteria = '';
-
-  settings = SearchSettings;
-  searchResults: SearchResults = [];
-  suggestions: SearchResults = [];
-  focusedSuggestion?: SearchResult;
-  lastSuggestionCriteria = '';
-  suggestionsVisible = false;
-  currentSetting: SearchSetting = this.settings[0];
-  searchData: SearchData = {};
-  searchInProgress = false;
-  topBarShadow = false;
-
   private activatedRoute = inject(ActivatedRoute);
   private router = inject(Router);
   private movieDb = inject(MovieDbService);
   private translate = inject(TranslateService);
   private localStorage = inject(LocalStorageService);
+  private mediaTitle = inject(MediaTitlePipe);
+  @ViewChild('suggestionList') suggestionList?: SuggestionListComponent;
+
+  searchCriteria = '';
+  settings = SearchSettings;
+  searchResults: SearchResults = [];
+  suggestionsHidden = true;
+  currentSetting: SearchSetting = this.settings[0];
+  searchData: SearchData = {};
+  searchInProgress = false;
+  topBarShadow = false;
 
   ngOnInit(): void {
     this.activatedRoute.params.subscribe({
@@ -82,8 +88,7 @@ export class SearchComponent implements OnInit {
     }
     this.searchData.currentPage = (this.searchData.currentPage ?? 0) + 1;
     this.searchInProgress = true;
-    this.suggestions = [];
-    this.suggestionsVisible = false;
+    this.suggestionsHidden = true;
     this.movieDb
       .search(<SearchParam>{
         media_type: this.searchData.setting.id,
@@ -101,9 +106,10 @@ export class SearchComponent implements OnInit {
   }
 
   onSearch() {
-    if (this.focusedSuggestion) {
+    if (this.suggestionList?.focusedSuggestion) {
       this.searchCriteria =
-        this.getTitle(this.focusedSuggestion) ?? this.searchCriteria;
+        this.mediaTitle.transform(this.suggestionList.focusedSuggestion) ??
+        this.searchCriteria;
     }
     this.router.navigate(['/' + this.currentSetting.id, this.searchCriteria]);
   }
@@ -128,95 +134,10 @@ export class SearchComponent implements OnInit {
     }
   }
 
-  trending() {
-    this.suggestionsVisible = true;
-    if (!this.searchCriteria) {
-      this.suggestions = [];
-      return;
-    }
-    if (this.lastSuggestionCriteria == this.searchCriteria) {
-      return;
-    }
-    this.lastSuggestionCriteria = this.searchCriteria;
-    this.movieDb
-      .search(<SearchParam>{
-        media_type: this.currentSetting.id,
-        query: this.searchCriteria,
-      })
-      .then((value) => {
-        value = this.movieDb.fillMissingMediaTypes(value);
-        this.suggestions = value.results?.slice(0, 10);
-      })
-      .finally(() => (this.focusedSuggestion = undefined));
-  }
-
   suggestionsDelayedHide() {
     interval(100)
       .pipe(take(1))
-      .subscribe(() => (this.suggestionsVisible = false));
-  }
-
-  prevSuggestion() {
-    if (!this.suggestions || this.suggestions.length == 0) {
-      return;
-    }
-    if (!this.focusedSuggestion) {
-      this.focusedSuggestion = this.suggestions[this.suggestions.length - 1];
-    } else {
-      const index = this.suggestions.indexOf(this.focusedSuggestion) - 1;
-      if (index < 0) {
-        this.focusedSuggestion = undefined;
-      } else {
-        this.focusedSuggestion = this.suggestions[index];
-      }
-    }
-  }
-
-  nextSuggestion() {
-    if (!this.suggestions || this.suggestions.length == 0) {
-      return;
-    }
-    if (!this.focusedSuggestion) {
-      this.focusedSuggestion = this.suggestions[0];
-    } else {
-      const index = this.suggestions.indexOf(this.focusedSuggestion) + 1;
-      if (index >= this.suggestions.length) {
-        this.focusedSuggestion = undefined;
-      } else {
-        this.focusedSuggestion = this.suggestions[index];
-      }
-    }
-  }
-
-  getTitle(searchResult: SearchResult): string | undefined {
-    switch (searchResult.media_type) {
-      case 'movie':
-        return searchResult.title;
-      case 'tv':
-        return searchResult.name;
-      case 'person':
-        return searchResult.name;
-    }
-  }
-
-  getYear(searchResult: SearchResult): string | undefined {
-    switch (searchResult.media_type) {
-      case 'movie':
-        return searchResult.release_date?.substring(0, 4);
-      case 'tv':
-        return searchResult.first_air_date?.substring(0, 4);
-      case 'person':
-        return undefined;
-    }
-  }
-
-  searchBySuggestion(item: SearchResult) {
-    const title = this.getTitle(item);
-    if (!title) {
-      return;
-    }
-    this.searchCriteria = title;
-    this.search();
+      .subscribe(() => (this.suggestionsHidden = true));
   }
 
   @HostListener('window:scroll')
@@ -237,13 +158,16 @@ export class SearchComponent implements OnInit {
     this.topBarShadow = window.scrollY > 20;
   }
 
-  isFocused(a: Element) {
-    return a == document.activeElement;
-  }
-
   changeLanguage() {
     const language = this.translate.currentLang === 'hu-HU' ? 'en-US' : 'hu-HU';
     this.translate.use(language);
     this.localStorage.lastUsedLanguage = language;
+  }
+
+  suggestionCriteria(value: string) {
+    if (this.suggestionList) {
+      this.suggestionList.criteria = value;
+      this.suggestionsHidden = false;
+    }
   }
 }

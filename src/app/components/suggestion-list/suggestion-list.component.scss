@@ -1,0 +1,52 @@
+:host {
+  background-color: #fafafa;
+  border-radius: 12px;
+  width: 600px;
+  max-width: 100%;
+  position: absolute;
+  top: 50px;
+
+  div {
+    display: flex;
+    flex-direction: row;
+    padding: 10px 15px;
+    cursor: pointer;
+    align-items: center;
+    gap: 7px;
+
+    :nth-child(1) {
+      color: rgba(0, 0, 0, 0.75);
+    }
+
+    :nth-child(2) {
+      flex: 1;
+      overflow: hidden;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+    }
+
+    :nth-child(3) {
+      color: rgba(0, 0, 0, 0.5);
+    }
+  }
+
+  div:hover {
+    background-color: #d8e1e4;
+  }
+
+  .focused-suggestion:first-child,
+  :first-child:hover {
+    border-top-left-radius: inherit;
+    border-top-right-radius: inherit;
+  }
+
+  .focused-suggestion:last-child,
+  :last-child:hover {
+    border-bottom-left-radius: inherit;
+    border-bottom-right-radius: inherit;
+  }
+
+  .focused-suggestion {
+    background-color: #cbd3d7 !important;
+  }
+}

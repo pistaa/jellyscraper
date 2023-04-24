@@ -17,6 +17,9 @@ import { AppComponent } from './app.component';
 import { MediaCardListComponent } from './components/media-card-list/media-card-list.component';
 import { MediaCardComponent } from './components/media-card/media-card.component';
 import { SearchComponent } from './components/search/search.component';
+import { SuggestionListComponent } from './components/suggestion-list/suggestion-list.component';
+import { MediaTitlePipe } from './pipes/media-title.pipe';
+import { MediaYearPipe } from './pipes/media-year.pipe';
 
 export function HttpLoaderFactory(http: HttpClient) {
   return new TranslateHttpLoader(http);
@@ -34,6 +37,9 @@ const appRoutes: Routes = [
     SearchComponent,
     MediaCardComponent,
     MediaCardListComponent,
+    SuggestionListComponent,
+    MediaTitlePipe,
+    MediaYearPipe,
   ],
   imports: [
     BrowserModule,
@@ -60,7 +66,7 @@ const appRoutes: Routes = [
     }),
     RouterModule.forRoot(appRoutes),
   ],
-  providers: [],
+  providers: [MediaTitlePipe, MediaYearPipe],
   bootstrap: [AppComponent],
 })
 export class AppModule {}

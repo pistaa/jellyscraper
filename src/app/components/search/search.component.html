@@ -22,12 +22,15 @@
       </g>
     </svg>
     <input type="text" placeholder="{{ 'Search' | translate }}" #searchInput [(ngModel)]="searchCriteria"
-      (keyup)="trending()" (keyup.arrowup)="prevSuggestion()" (keyup.arrowdown)="nextSuggestion()"
-      (keyup.enter)="onSearch()" (blur)="suggestionsDelayedHide()">
+      (keyup)="suggestionCriteria(searchCriteria)" (keyup.arrowup)="suggestionList?.prev()"
+      (keyup.arrowdown)="suggestionList?.next()" (keyup.enter)="onSearch()" (blur)="suggestionsDelayedHide()">
     <button matRipple type="button" title="{{ 'Clear search criteria' | translate }}" *ngIf="searchCriteria"
-      (click)="searchCriteria = ''; searchInput.focus()"><mat-icon>clear</mat-icon></button>
-    <button matRipple type="submit" title="{{ 'Search' | translate }}" #searchBtn
-      (click)="search()"><mat-icon>search</mat-icon></button>
+      (click)="searchCriteria = ''; searchInput.focus()">
+      <mat-icon>clear</mat-icon>
+    </button>
+    <button matRipple type="submit" title="{{ 'Search' | translate }}" #searchBtn (click)="search()">
+      <mat-icon>search</mat-icon>
+    </button>
   </div>
   <div>
     <span *ngFor="let item of settings" class="setting" [ngClass]="{ 'selected-setting': item === currentSetting }"
@@ -43,14 +46,9 @@
       <span>{{ 'Language' | translate }}</span>
     </span>
   </div>
-  <div *ngIf="suggestions && suggestions.length > 0 && suggestionsVisible" id="trending-results">
-    <div *ngFor="let item of suggestions" (click)="searchBySuggestion(item)"
-      [ngClass]="{ 'focused-trending-item': item === focusedSuggestion }">
-      <mat-icon>{{ item.media_type }}</mat-icon>
-      <span>{{ getTitle(item) }}</span>
-      <span>{{ getYear(item) }}</span>
-    </div>
-  </div>
+  <app-suggestion-list #suggestionList [hidden]="suggestionsHidden"
+    (selectSuggestion)="searchCriteria = $event; onSearch()">
+  </app-suggestion-list>
 </header>
 <app-media-card-list [mediaList]="searchResults"></app-media-card-list>
 <div *ngIf="searchInProgress" id="search-indicator">

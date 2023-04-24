@@ -1,0 +1,6 @@
+<div *ngFor="let item of suggestions" (click)="selectSuggestion.emit(mediaTitle.transform(item))"
+  [ngClass]="{ 'focused-suggestion': item === focusedSuggestion }">
+  <mat-icon>{{ item.media_type }}</mat-icon>
+  <span>{{ item | mediaTitle }}</span>
+  <span>{{ item | mediaYear }}</span>
+</div>
