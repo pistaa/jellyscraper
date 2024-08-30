@@ -133,7 +133,7 @@ export class SearchComponent implements OnInit {
   }
 
   suggestionsDelayedHide() {
-    interval(100)
+    interval(500)
       .pipe(take(1))
       .subscribe(() => (this.suggestionsHidden = true));
   }

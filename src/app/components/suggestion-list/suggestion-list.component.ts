@@ -8,6 +8,9 @@ import { SearchResult, SearchResults } from 'src/app/types';
   selector: 'app-suggestion-list',
   templateUrl: './suggestion-list.component.html',
   styleUrls: ['./suggestion-list.component.scss'],
+  providers: [
+    MediaTitlePipe
+  ]
 })
 export class SuggestionListComponent {
   private movieDb = inject(MovieDbService);
@@ -70,5 +73,9 @@ export class SuggestionListComponent {
         this.focusedSuggestion = this.suggestions[index];
       }
     }
+  }
+
+  onSelect(item: SearchResult) {
+    this.selectSuggestion.emit(this.mediaTitle.transform(item));
   }
 }

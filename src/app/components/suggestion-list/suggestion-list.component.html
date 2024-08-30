@@ -1,4 +1,4 @@
-<div *ngFor="let item of suggestions" (click)="selectSuggestion.emit(mediaTitle.transform(item))"
+<div *ngFor="let item of suggestions" (click)="$event.stopPropagation(); onSelect(item)"
   [ngClass]="{ 'focused-suggestion': item === focusedSuggestion }">
   <mat-icon>{{ item.media_type }}</mat-icon>
   <span>{{ item | mediaTitle }}</span>
