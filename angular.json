@@ -2,7 +2,8 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "cli": {
-    "packageManager": "npm"
+    "packageManager": "npm",
+    "analytics": false
   },
   "newProjectRoot": "projects",
   "projects": {
@@ -72,7 +73,10 @@
               "buildTarget": "jellyscraper:build:production"
             },
             "development": {
-              "buildTarget": "jellyscraper:build:development"
+              "buildTarget": "jellyscraper:build:development",
+              "host": "0.0.0.0",
+              "allowedHosts": ["localhost", "127.0.0.1", "0.0.0.0"],
+              "hmr": false
             }
           },
           "defaultConfiguration": "development"
