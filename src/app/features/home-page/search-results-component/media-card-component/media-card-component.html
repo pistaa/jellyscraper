@@ -1,0 +1,53 @@
+<div class="poster" [style.background-image]="this.poster() ? `url('${poster()}')` : 'unset'">
+  @if (overview()) {
+    <div class="overview">
+      <h3>Áttekintés</h3>
+      <p>
+        {{ overview() }}
+      </p>
+    </div>
+  }
+  @if (rating()) {
+    <div class="rating">
+      <img src="/icons/star.svg" [alt]="rating() | number : '1.1-1'">
+      <span>
+        {{ rating() | number : '1.1-1' }}
+      </span>
+    </div>
+  }
+  @switch (data()?.media_type) {
+    @case ('movie') {
+      <div class="media-type">
+        <img src="/icons/movie.svg" [alt]="title()"/>
+      </div>
+    }
+    @case ('tv') {
+      <div class="media-type">
+        <img src="/icons/tvshow.svg" [alt]="title()"/>
+      </div>
+    }
+    @case ('person') {
+      <div class="media-type">
+        <img src="/icons/person.svg" [alt]="title()"/>
+      </div>
+    }
+  }
+</div>
+<div class="meta-container">
+  <h3>{{ title() }}</h3>
+  <p>{{ subtitle() }}</p>
+</div>
+<div class="actions">
+  <button [disabled]="!['tv', 'movie'].includes(data()?.media_type ?? '') || !folderName()" (click)="copyToClipboard()">
+    @if (copied()) {
+      <img src="/icons/done.svg" alt="Másolva">
+      <span>Másolva</span>
+    } @else {
+      <img src="/icons/copy.svg" alt="Másolás">
+      <span>Másolás</span>
+    }
+  </button>
+  <button [disabled]="data()?.id == undefined" (click)="redirectToInfoPage()">
+    <img src="/icons/info.svg" alt="Infó">
+  </button>
+</div>

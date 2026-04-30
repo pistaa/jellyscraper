@@ -1,0 +1,41 @@
+<div class="title-container" [class.hidden]="searchQuery()">
+  <h1>
+    Találd meg a
+    <span class="highlight">következőt</span>
+  </h1>
+  <p class="subtitle">
+    Minden film és sorozat adat egyetlen elegáns felületen. Gyors, precíz és teljesen automatizált adatgyűjtés a
+    streaming világából.
+  </p>
+</div>
+<div class="search-box-container">
+  <img src="/icons/search.svg" alt="Keresés">
+  <input #searchInput type="text" (input)="onSearchInput()">
+</div>
+<div class="feature-disclaimer-container" [class.hidden]="searchQuery()">
+  <div id="feature-1" class="feature-box">
+    <h3>Mélyreható adatok</h3>
+    <p>
+      Értékelések és technikai adatok minden egyes produkcióról az egyik legnagyobb adatbázisból.
+    </p>
+  </div>
+  <div id="feature-2" class="feature-box">
+    <h3>Villámgyors</h3>
+    <p>
+      Adatok azonnal, várakozás nélkül.
+    </p>
+  </div>
+  <div id="feature-3" class="feature-box">
+    <h3>Nyelvtámogatás</h3>
+    <p>
+      Minden régió és nyelv támogatott a keresések során.
+    </p>
+  </div>
+  <div id="feature-4" class="feature-box">
+    <h3>Vizuális könyvtár</h3>
+    <p>
+      Fedezd fel a tartalmakat gyönyörű, nagyfelbontású poszterekkel.
+    </p>
+  </div>
+</div>
+<app-search-results-component [criteria]="searchQuery()" [results]="searchResults()" [loading]="loading()"/>

@@ -1,0 +1,15 @@
+<div class="results-container">
+  @for (item of items(); track item.id) {
+    <app-media-card-component [data]="item" />
+  }
+</div>
+
+@if (loading()) {
+  <div class="loader"></div>
+}
+
+@if (hasNextPage() && !loading()) {
+  <button class="load-next-page-button" (click)="loadNextPage()">
+    További találatok betöltése
+  </button>
+}
