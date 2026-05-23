@@ -10,10 +10,6 @@ export const routes: Routes = [
         path: '',
         loadComponent: () => import('./features/home-page/home-page').then((m) => m.HomePage),
       },
-      {
-        path: 'about',
-        loadComponent: () => import('./features/about-page/about-page').then((m) => m.AboutPage),
-      },
     ],
   },
 ];

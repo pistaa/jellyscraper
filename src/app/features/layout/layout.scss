@@ -43,33 +43,6 @@ header {
       display: none;
     }
   }
-
-  nav {
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    flex: 1;
-    justify-content: flex-end;
-
-    .menu {
-      transition-duration: 200ms;
-      transition-property: transform;
-      transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
-      color: rgb(100 116 139 / var(--tw-text-opacity, 1));
-      font-weight: 700;
-      text-decoration: none;
-
-      &:not(:first-of-type) {
-        margin-left: 2rem;
-      }
-
-      &.active {
-        color: rgb(85 67 207 / var(--tw-text-opacity, 1));
-        border-bottom: 2px solid currentColor;
-        margin-top: 2px;
-      }
-    }
-  }
 }
 
 main {

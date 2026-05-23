@@ -1,7 +1,6 @@
 import {
   AfterViewInit,
   Component,
-  computed,
   effect,
   ElementRef,
   inject,
@@ -13,6 +12,8 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { SearchResultsComponent } from './search-results-component/search-results-component';
 import { MultiSearchResult, Search } from 'tmdb-ts';
+import { Location } from '@angular/common';
+import { ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-home-page',
@@ -22,7 +23,9 @@ import { MultiSearchResult, Search } from 'tmdb-ts';
 })
 export class HomePage implements AfterViewInit {
   private readonly _tmdbService = inject(TmdbService);
-  protected searchInput = viewChild<ElementRef>('searchInput');
+  private readonly _location = inject(Location);
+  private readonly _activatedRoute = inject(ActivatedRoute);
+  protected searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   protected searchQuery = signal('');
   protected searchResults = signal<Search<MultiSearchResult> | undefined>(undefined);
   protected loading = signal(false);
@@ -32,7 +35,7 @@ export class HomePage implements AfterViewInit {
     this._searchQueryChanged
       .pipe(takeUntilDestroyed(), debounceTime(400))
       .subscribe((queryCriteria) => {
-        window.scrollTo({ top: 0 });
+        this.window()?.scrollTo?.({ top: 0 });
         if (!queryCriteria) {
           this.searchResults.set(undefined);
           return;
@@ -42,10 +45,12 @@ export class HomePage implements AfterViewInit {
           .search(queryCriteria)
           .then((resposne) => {
             this.searchResults.set(resposne);
-            this.loading.set(false);
+            this._location.replaceState(`/?search=${encodeURIComponent(queryCriteria)}`);
           })
           .catch((err) => {
             console.error(err);
+          })
+          .finally(() => {
             this.loading.set(false);
           });
       });
@@ -62,9 +67,21 @@ export class HomePage implements AfterViewInit {
 
   ngAfterViewInit() {
     this.searchInput()?.nativeElement.focus();
+    const searchQuery = this._activatedRoute.snapshot.queryParams['search'];
+    const searchInput = this.searchInput();
+    if (searchQuery && searchInput) {
+      searchInput.nativeElement.value = searchQuery;
+      searchInput.nativeElement.selectionStart = searchQuery.length;
+      searchInput.nativeElement.selectionEnd = searchQuery.length;
+      this.onSearchInput().finally();
+    }
   }
 
   protected async onSearchInput() {
     this.searchQuery.set(this.searchInput()?.nativeElement.value ?? '');
+  }
+
+  private window() {
+    return typeof window !== 'undefined' ? window : undefined;
   }
 }

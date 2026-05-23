@@ -1,4 +1,4 @@
-import { Component, computed, inject, input, model, signal } from '@angular/core';
+import { Component, computed, inject, input, model } from '@angular/core';
 import { MultiSearchResult, Search } from 'tmdb-ts';
 import { MediaCardComponent } from './media-card-component/media-card-component';
 import { TmdbService } from '../service/tmdb-service';
@@ -28,7 +28,7 @@ export class SearchResultsComponent {
       return false;
     }
     return currentPage < totalPages;
-  })
+  });
 
   protected async loadNextPage() {
     if (!this.hasNextPage()) {
@@ -40,7 +40,7 @@ export class SearchResultsComponent {
       if (!response.results.length) {
         return;
       }
-      this.results.set({...response, results: [...this.items(), ...response.results]});
+      this.results.set({ ...response, results: [...this.items(), ...response.results] });
     } finally {
       this.loading.set(false);
     }
