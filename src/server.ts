@@ -9,10 +9,10 @@ import { join } from 'node:path';
 import { TMDB } from 'tmdb-ts';
 import { ParsedQs } from 'qs';
 import { AvailableLanguage } from 'tmdb-ts/dist/types/options';
-import { SearchOptions } from 'tmdb-ts/dist/endpoints';
-import { Request, RequestHandler, Response } from 'express-serve-static-core';
+import { Request, Response } from 'express-serve-static-core';
 
-const tmdbAccessToken = 'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMzJlZDZjZDg2NTM4ZGE2YzljOWEwZGRiM2NjYmIwYiIsIm5iZiI6MTQ1MTkxODk4OC41NzEsInN1YiI6IjU2OGE4NjhjYzNhMzY4NWY4OTAxNTA2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.oyzhvAXJe1XfQTASeEGxrnrFPtz4bPcemyAXXsFYWcw';
+const tmdbAccessToken =
+  'eyJhbGciOiJIUzI1NiJ9.eyJhdWQiOiIxMzJlZDZjZDg2NTM4ZGE2YzljOWEwZGRiM2NjYmIwYiIsIm5iZiI6MTQ1MTkxODk4OC41NzEsInN1YiI6IjU2OGE4NjhjYzNhMzY4NWY4OTAxNTA2YSIsInNjb3BlcyI6WyJhcGlfcmVhZCJdLCJ2ZXJzaW9uIjoxfQ.oyzhvAXJe1XfQTASeEGxrnrFPtz4bPcemyAXXsFYWcw';
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
@@ -30,13 +30,17 @@ const angularApp = new AngularNodeAppEngine();
  * ```
  */
 
-function getQueryParam<T extends string | number>(query: ParsedQs, paramName: string, type: 'string' | 'number'): T | undefined {
+function getQueryParam<T extends string | number>(
+  query: ParsedQs,
+  paramName: string,
+  type: 'string' | 'number',
+): T | undefined {
   let value: undefined | string | number | ParsedQs | (string | ParsedQs)[] = query[paramName];
   if (!value) {
     return undefined;
   }
   if (type === 'string') {
-    return value as T || undefined;
+    return (value as T) || undefined;
   }
   if (type === 'number') {
     value = +value;
@@ -69,7 +73,7 @@ function createSearchHandler<T extends keyof TMDB['search']>(method: T) {
         query,
         page,
         language: language ?? 'hu-HU',
-        include_adult: true,
+        include_adult: false,
       });
 
       return res.json(result);
@@ -165,9 +169,7 @@ app.use(
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) =>
-      response ? writeResponseToNodeResponse(response, res) : next(),
-    )
+    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
     .catch(next);
 });
 
