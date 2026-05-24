@@ -33,7 +33,7 @@ export class HomePage implements AfterViewInit {
 
   constructor() {
     this._searchQueryChanged
-      .pipe(takeUntilDestroyed(), debounceTime(400))
+      .pipe(takeUntilDestroyed(), debounceTime(300))
       .subscribe((queryCriteria) => {
         this.window()?.scrollTo?.({ top: 0 });
         if (!queryCriteria) {
