@@ -1,6 +1,6 @@
 <div class="results-container">
   @for (item of items(); track item.id) {
-    <app-media-card-component [data]="item" />
+    <app-media-card-component [data]="item" animate.enter="enter-animation" animate.leave="leave-animation"/>
   }
 </div>
 
