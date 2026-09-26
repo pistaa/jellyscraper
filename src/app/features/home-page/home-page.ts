@@ -12,7 +12,6 @@ import { takeUntilDestroyed, toObservable } from '@angular/core/rxjs-interop';
 import { debounceTime } from 'rxjs';
 import { SearchResultsComponent } from './search-results-component/search-results-component';
 import { MultiSearchResult, Search } from 'tmdb-ts';
-import { Location } from '@angular/common';
 import { ActivatedRoute } from '@angular/router';
 
 @Component({
@@ -23,7 +22,6 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomePage implements AfterViewInit {
   private readonly _tmdbService = inject(TmdbService);
-  private readonly _location = inject(Location);
   private readonly _activatedRoute = inject(ActivatedRoute);
   protected searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   protected searchQuery = signal('');
@@ -79,6 +77,20 @@ export class HomePage implements AfterViewInit {
 
   protected async onSearchInput() {
     this.searchQuery.set(this.searchInput()?.nativeElement.value ?? '');
+  }
+
+  protected clearCriteria(event?: Event) {
+    if (event) {
+      event.preventDefault();
+      event.stopImmediatePropagation();
+      event.stopPropagation();
+    }
+    const searchInput = this.searchInput();
+    if (searchInput) {
+      searchInput.nativeElement.value = '';
+      searchInput.nativeElement.focus();
+    }
+    void this.onSearchInput();
   }
 
   private window() {

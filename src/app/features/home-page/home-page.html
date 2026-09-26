@@ -11,6 +11,10 @@
 <div class="search-box-container">
   <img src="/icons/search.svg" alt="Keresés">
   <input #searchInput type="text" (input)="onSearchInput()">
+  @if (searchInput.value) {
+    <img src="/icons/x.svg" class="clear-criteria" alt="Keresési feltétel törlése" role="button" tabindex="0"
+         (click)="clearCriteria()" (keydown.space)="clearCriteria($event)" (keydown.enter)="clearCriteria($event)">
+  }
 </div>
 <div class="feature-disclaimer-container" [class.hidden]="searchQuery()">
   <div id="feature-1" class="feature-box">
