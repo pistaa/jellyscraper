@@ -25,6 +25,7 @@ export class HomePage implements AfterViewInit {
   private readonly _tmdbService = inject(TmdbService);
   private readonly _location = inject(Location);
   private readonly _activatedRoute = inject(ActivatedRoute);
+  private searchId = 0;
   protected searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   protected searchQuery = signal('');
   protected searchResults = signal<Search<MultiSearchResult> | undefined>(undefined);
@@ -41,9 +42,13 @@ export class HomePage implements AfterViewInit {
           return;
         }
         this.loading.set(true);
+        const searchId = ++this.searchId;
         this._tmdbService
           .search(queryCriteria)
           .then((resposne) => {
+            if (searchId !== this.searchId) {
+              return;
+            }
             this.searchResults.set(resposne);
             this._location.replaceState(`/?search=${encodeURIComponent(queryCriteria)}`);
           })
