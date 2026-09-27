@@ -13,6 +13,7 @@ import { debounceTime } from 'rxjs';
 import { SearchResultsComponent } from './search-results-component/search-results-component';
 import { MultiSearchResult, Search } from 'tmdb-ts';
 import { ActivatedRoute } from '@angular/router';
+import { Location } from '@angular/common';
 
 @Component({
   selector: 'app-home-page',
@@ -22,6 +23,7 @@ import { ActivatedRoute } from '@angular/router';
 })
 export class HomePage implements AfterViewInit {
   private readonly _tmdbService = inject(TmdbService);
+  private readonly _location = inject(Location);
   private readonly _activatedRoute = inject(ActivatedRoute);
   protected searchInput = viewChild<ElementRef<HTMLInputElement>>('searchInput');
   protected searchQuery = signal('');
